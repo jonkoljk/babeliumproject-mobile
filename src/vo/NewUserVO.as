@@ -4,8 +4,8 @@ package vo
    	[Bindable]
 	public class NewUserVO
 	{
-		public var name:String;
-		public var pass:String;
+		public var username:String;
+		public var password:String;
      	public var realName:String;
      	public var realSurname:String;
 		public var email:String;
@@ -14,10 +14,10 @@ package vo
 		//Stores the languages the user knows or is interested in
 		public var languages:Array;
 		
-		public function NewUserVO(name:String, pass:String, realName:String, realSurname:String, email:String, activationHash:String, languages:Array){
+		public function NewUserVO(username:String, password:String, realName:String, realSurname:String, email:String, activationHash:String, languages:Array){
 			
-			this.name = name;
-			this.pass = pass;
+			this.username = username;
+			this.password = password;
 			this.realName = realName;
 			this.realSurname = realSurname;
 			this.email =  email;
