@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+							xmlns:s="library://ns.adobe.com/flex/spark"
+							xmlns:business="business.*"
+							xmlns:utils="utils.*"
+							xmlns:control="control.*"
+							xmlns:model="model.*"
+							xmlns:supportClasses="spark.skins.mobile.supportClasses.*"
+							width="100%" firstView="View.MobileProjectHome">
+	<fx:Metadata>
+		[ResourceBundle("myResources")]
+	</fx:Metadata>
+	<fx:Script>
+         
+		
+		
+		<![CDATA[
+			//import View.EvaluationsOnMe;
+			import View.Home;
+			
+			import events.LoginEvent;
+			
+			import model.DataModel;
+			
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			
+			/*protected function evaluate_clickHandler(event:MouseEvent):void
+			{
+				navigator.pushView(View.Evaluate,null,null,slideTrans);
+				
+				
+			}*/
+			
+			protected function list_evaluate(event:IndexChangeEvent):void
+			{
+				if(evalList.selectedItem=="To evaluate"){
+					navigator.pushView(View.PendingEvaluations,null,null,slideTrans);
+				} else {
+					if (evalList.selectedItem=="Assessments to me"){
+						navigator.pushView(View.EvaluationsOnMe,null,null,slideTrans);
+					} else {
+						if (evalList.selectedItem=="Assessments by me"){
+							navigator.pushView(View.MyEvaluations,null,null,slideTrans);
+						}
+					}
+				}
+				
+				evaluate_group.closeDropDown();
+				List(event.target).selectedItem=null;
+			}
+			
+			protected function upload_video(event:MouseEvent):void
+			{
+				navigator.pushView(View.Upload_Video,null,null,slideTrans);
+				
+			}
+			
+			protected function practice(event:MouseEvent):void
+			{
+				navigator.pushView(View.Practice,null,null,slideTrans);
+				
+			}
+			
+			protected function menu(event:MouseEvent):void
+			{
+				navigator.pushView(View.Home,null,null,slideTrans);
+				// TODO Auto-generated method stub
+			}
+			
+			
+			protected function cb_creationCompleteHandler(event:FlexEvent):void
+			{
+				// get data from the server
+							
+			}
+			
+			protected function list_changeHandler(event:IndexChangeEvent):void
+				
+			{
+				if(list.selectedItem=="My Profile"){
+						navigator.pushView(View.User_Profile,null,null,slideTrans);
+					
+				}
+					
+				else{
+					if(list.selectedItem=="My Videos"){
+						navigator.pushView(View.My_Videos,null,null,slideTrans);
+					}
+					else{
+						if(list.selectedItem=="About Us"){
+							navigator.pushView(View.About,null,null,slideTrans);
+						}
+						else if(list.selectedItem=="Log Out"){
+							//Log out User call  log out event!
+							new LoginEvent(LoginEvent.SIGN_OUT, null).dispatch();
+							navigator.popToFirstView(null);
+							
+						}
+					}
+				}
+				cb.closeDropDown();
+				List(event.target).selectedItem=null;
+				
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+		
+	</fx:Script>
+	
+	
+	
+	
+	<s:navigationContent>
+		
+		<s:Button  id="menu_button" icon="assets/home.png" click="menu(event)"/>
+	</s:navigationContent>
+	
+	<s:titleContent>
+		<s:Group x="13" y="0" width="100%">
+			<s:layout>
+				<s:ViewMenuLayout/>
+			</s:layout>
+			<s:HGroup id="practice_group" width="100" height="75" horizontalAlign="center"
+					  verticalAlign="middle">
+				
+				<s:Image  width="34"  height="34" buttonMode="true" click="practice(event)"
+						  source="assets/Practice.png" />
+			</s:HGroup>
+			<!-- <s:HGroup width="33%" id="evaluate_group" horizontalAlign="center">
+				
+				
+				<s:Image  width="34" height="34" buttonMode="true"
+						  source="assets/evaluate.png" click="evaluate_clickHandler(event)"/>
+			</s:HGroup> -->
+			
+			<s:HGroup horizontalAlign="center" verticalAlign="justify">
+				<s:CalloutButton id="evaluate_group" height="75" calloutDestructionPolicy="never"
+								 creationComplete="cb_creationCompleteHandler(event)"
+								 icon="assets/evaluate.png" verticalPosition="after">
+					<s:calloutLayout>
+						<s:VerticalLayout paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" horizontalAlign="center" gap="5">
+						</s:VerticalLayout>
+					</s:calloutLayout>
+					<s:calloutContent >
+						<s:VGroup paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" horizontalAlign="center">
+							<s:List id="evalList" dataProvider="{model.DataModel.getInstance().evalListArrayCollection}" height="200" width="215" change="list_evaluate(event)"/>
+						</s:VGroup>
+					</s:calloutContent>
+				</s:CalloutButton>
+			</s:HGroup>
+			
+			<s:HGroup id="upload_group" width="100" height="75" horizontalAlign="center"
+					  verticalAlign="contentJustify">
+				
+				
+				<s:Image  width="34" height="34" buttonMode="true"
+						  source="assets/upload.png" click="upload_video(event)"/>
+				
+			</s:HGroup>
+			
+		</s:Group>
+		
+	</s:titleContent>
+	
+	<s:actionContent>
+		<s:CalloutButton id="cb" icon="assets/user.png" verticalPosition="after" calloutDestructionPolicy="never" creationComplete="cb_creationCompleteHandler(event)">
+			<s:calloutLayout>
+				<s:VerticalLayout paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" horizontalAlign="center" gap="5">
+				</s:VerticalLayout>
+			</s:calloutLayout>
+			<s:calloutContent >
+				<s:VGroup paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10" horizontalAlign="center">
+					<s:List id="list" dataProvider="{model.DataModel.getInstance().userArrayCollection}"  width="200" change="list_changeHandler(event)"/>
+				</s:VGroup>
+			</s:calloutContent>
+		</s:CalloutButton>
+	</s:actionContent>
+	
+	
+	
+	
+	
+	
+	<fx:Style source="Main.css"/>
+	
+	<fx:Declarations>
+		<business:Services/>
+		
+		<control:Controller/>
+		
+		
+		
+		<s:SlideViewTransition id="slideTrans" duration="0"/>
+		<s:SlideViewTransition id="zoomTrans" duration="0"/>
+		
+		
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+</s:ViewNavigatorApplication>
