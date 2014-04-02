@@ -911,6 +911,8 @@ package modules.videoPlayer
 				public function getFrontCamera():Camera
 				{
 					//First check if the device supports a camera
+					trace("Front camera:" + Camera.isSupported);
+					trace("Mic:" + Microphone.isSupported);
 					if (Camera.isSupported == false)
 					{
 						return null;
@@ -922,12 +924,14 @@ package modules.videoPlayer
 					for (var i:int = 0; i < numCameras; i++)
 			
 					{
-						frontCam = Camera.getCamera(Camera.names[i]);
-						//If the camera.position property matches the constant CameraPosition.FRONT we have found the front camera
-						/*if (frontCam.position == CameraPosition.FRONT)
-						{
-							break;
-						}*/
+						if (Camera.getCamera(Camera.names[i]) != null){
+							frontCam = Camera.getCamera(Camera.names[i]);
+							//If the camera.position property matches the constant CameraPosition.FRONT we have found the front camera
+							if (frontCam.position == CameraPosition.FRONT)
+							{
+								break;
+							}
+						}
 						//Make sure the camera object is set to null
 						frontCam = null;
 					}

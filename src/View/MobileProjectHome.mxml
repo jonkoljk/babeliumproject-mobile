@@ -33,7 +33,6 @@
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				var passHash:String=SHA1.hash(text2.text);
-				trace (text2.text);
 				var user:LoginVO=new LoginVO(text.text, passHash);
 				new SetupConnectionEvent().dispatch();
 				new LoginEvent(LoginEvent.PROCESS_LOGIN, user).dispatch();	

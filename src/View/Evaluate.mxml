@@ -72,7 +72,9 @@
 			[Bindable]
 			private var _characterNames:ArrayCollection=new ArrayCollection();
 			[Bindable]
-			private var EVALUATION_NAME:String;
+			private var EXERCISE_NAME:String;
+			[Bindable]
+			private var RESPONSE_NAME:String;
 			
 			
 			private var _assessCheck:Boolean = false;
@@ -87,7 +89,7 @@
 			
 			private var _exerciseStartedPlaying:Boolean=false;
 			public var _videoPlayerReady:Boolean=false;
-			private const EVALUATION_FOLDER:String=DataModel.getInstance().exerciseStreamsFolder;
+			private const EXERCISE_FOLDER:String=DataModel.getInstance().exerciseStreamsFolder;
 			private const RESPONSE_FOLDER:String=DataModel.getInstance().responseStreamsFolder;
 
 			
@@ -99,8 +101,10 @@
 				{
 					//setupResponseOptions();
 					_currentResponse=data as EvaluationVO;
-					exerciseVideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
-					EVALUATION_NAME=_currentResponse.exerciseName as String;
+					VideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
+					EXERCISE_NAME=_currentResponse.exerciseName as String;
+					RESPONSE_NAME=_currentResponse.responseFileIdentifier as String;
+					
 					// Retrieving selected exercise information
 					_exerciseName=_currentResponse.exerciseName;
 					_exerciseTitle=_currentResponse.exerciseTitle;
@@ -128,13 +132,13 @@
 				{
 					if (cueobj.role != _selectedRole)
 					{
-						cueobj.setStartCommand(new RecordingOtherRoleCommand(cueobj, exerciseVideoPlayer));
-						cueobj.setEndCommand(new ShowHideSubtitleCommand(null, exerciseVideoPlayer));
+						cueobj.setStartCommand(new RecordingOtherRoleCommand(cueobj, VideoPlayer));
+						cueobj.setEndCommand(new ShowHideSubtitleCommand(null, VideoPlayer));
 					}
 					else
 					{
-						cueobj.setStartCommand(new StartRecordingSelectedRoleCommand(cueobj, exerciseVideoPlayer));
-						cueobj.setEndCommand(new StopRecordingSelectedRoleCommand(exerciseVideoPlayer));
+						cueobj.setStartCommand(new StartRecordingSelectedRoleCommand(cueobj, VideoPlayer));
+						cueobj.setEndCommand(new StopRecordingSelectedRoleCommand(VideoPlayer));
 						
 					}
 				}
@@ -203,9 +207,10 @@
 			private function prepareExercise():void
 			{
 				// Prepare new video in VideoPlayer
-				exerciseVideoPlayer.stopVideo();
-				exerciseVideoPlayer.state=VideoPlayerBabelia.PLAY_STATE;
-				exerciseVideoPlayer.videoSource=EVALUATION_FOLDER + '/' + EVALUATION_NAME;
+				VideoPlayer.state=VideoPlayerBabelia.PLAY_BOTH_STATE;
+				VideoPlayer.stopVideo();
+				VideoPlayer.videoSource=EXERCISE_FOLDER + '/' + EXERCISE_NAME;
+				VideoPlayer.secondSource=RESPONSE_FOLDER + '/' + RESPONSE_NAME;
 				
 				// Retrieving roles for selected exercise
 				var auxExRol:ExerciseRoleVO=new ExerciseRoleVO();
@@ -221,7 +226,7 @@
 			private function resetCueManager():void
 			{
 				_cueManager.reset();
-				exerciseVideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
+				VideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
 				_cueManager.removeEventListener(CueManagerEvent.SUBTITLES_RETRIEVED, onSubtitlesRetrieved);
 			}
 			
@@ -233,20 +238,20 @@
 				//_cueManager.setCuesFromSubtitleUsingLocale(availableLocales.selectedItem.code);
 				_cueManager.setCuesFromSubtitleUsingLocale(_locales[0]);
 				
-				exerciseVideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
-				exerciseVideoPlayer.addEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints,false,0,true);
+				VideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
+				VideoPlayer.addEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints,false,0,true);
 			}
 			
 			private function setupVideoPlayer():void
 			{
-				exerciseVideoPlayer.addEventListener(VideoPlayerEvent.CONNECTED, onVideoPlayerReady,false,0,true);
-				exerciseVideoPlayer.addEventListener(VideoPlayerEvent.VIDEO_STARTED_PLAYING, onVideoStartedPlaying,false,0,true);
+				VideoPlayer.addEventListener(VideoPlayerEvent.CONNECTED, onVideoPlayerReady,false,0,true);
+				VideoPlayer.addEventListener(VideoPlayerEvent.VIDEO_STARTED_PLAYING, onVideoStartedPlaying,false,0,true);
 			}
 			
 			private function onVideoPlayerReady(e:VideoPlayerEvent):void
 			{
 				_videoPlayerReady=true;
-				exerciseVideoPlayer.stopVideo();
+				VideoPlayer.stopVideo();
 			}
 			
 			private function onVideoStartedPlaying(e:VideoPlayerEvent):void
@@ -255,7 +260,7 @@
 				if (DataModel.getInstance().isLoggedIn && _cueManagerReady && _rolesReady && _localesReady && _exerciseStartedPlaying)
 				{
 					_exerciseStartedPlaying=false;
-					var subtitlesAreUsed:Boolean=exerciseVideoPlayer.subtitlePanelVisible;
+					var subtitlesAreUsed:Boolean=VideoPlayer.subtitlePanelVisible;
 					var subtitleId:int=_cueManager.currentSubtitle;
 					var videoData:UserVideoHistoryVO=new UserVideoHistoryVO(0, 0, _exerciseId, false, 0, '', subtitlesAreUsed, subtitleId, 0);
 					if (_exerciseId > 0 && subtitleId > 0)
@@ -278,8 +283,8 @@
 				prepareRoles(auxList);
 				for each (var cueobj:CueObject in auxList)
 				{
-					cueobj.setStartCommand(new ShowHideSubtitleCommand(cueobj, exerciseVideoPlayer));
-					cueobj.setEndCommand(new ShowHideSubtitleCommand(null, exerciseVideoPlayer));
+					cueobj.setStartCommand(new ShowHideSubtitleCommand(cueobj, VideoPlayer));
+					cueobj.setEndCommand(new ShowHideSubtitleCommand(null, VideoPlayer));
 				}
 				_cueManagerReady=true;
 				
@@ -342,10 +347,10 @@
 				//so that it can actually be unferenced and collected by the internal garbage collector.
 				//Since these objects are going to be constructed/destructed many times the use of "weak reference" 
 				//in the event listeners is also suggested, so that there is no obstacles for the gc.
-				exerciseVideoPlayer.endVideo(); // Stop video
-				exerciseVideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
+				VideoPlayer.endVideo(); // Stop video
+				VideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
 				_cueManager.removeEventListener(CueManagerEvent.SUBTITLES_RETRIEVED, onSubtitlesRetrieved);
-				exerciseVideoPlayer=null;
+				VideoPlayer=null;
 				_cueManager=null;
 			}
 			
@@ -540,7 +545,7 @@
 		<s:HGroup id="videoScreen" width="55%" height="100%" minWidth="0" minHeight="0"
 				  horizontalAlign="left" paddingLeft="16" paddingTop="6">
 			
-			<videoPlayer1:VideoPlayerBabelia id="exerciseVideoPlayer"
+			<videoPlayer1:VideoPlayerBabelia id="VideoPlayer"
 											 skin="white"
 											 seek="true"
 											 subtitles="true"
@@ -550,16 +555,6 @@
 											 height="{this.height/1.8}"
 											 streamSource="{DataModel.getInstance().streamingResourcesPath}"
 											 controlsEnabled="true"/>
-			<!--<videoPlayer2:VideoPlayerBabelia id="responseVideoPlayer"
-											 skin="white"
-											 seek="true"
-											 subtitles="true"
-											 autoPlay="false"
-											 autoScale="true"
-											 width="{this.width/2}"
-											 height="{this.height/1.8}"
-											 streamSource="{DataModel.getInstance().streamingResourcesPath}"
-											 controlsEnabled="true"/>-->
 			<!-- <s:HGroup id="recording_options" width="100%" minWidth="0" minHeight="0"
 					  paddingLeft="16" verticalAlign="top">
 			</s:HGroup> -->
