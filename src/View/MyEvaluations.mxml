@@ -79,7 +79,7 @@
 				  width="100%"
 				  paddingTop="16"
 				  paddingBottom="16">
-			<s:Label text="List of assessments made by me"
+			<s:Label text="{resourceManager.getString('myResources','RESPONSES_ASSESSED_BY_USER_LIST')}"
 					 styleName="sectionTitleLabel"
 					 id="userProfileTitleLabel"/>
 			<s:Line width="{userProfileTitleLabel.width}">

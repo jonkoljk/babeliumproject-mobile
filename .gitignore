@@ -8,6 +8,8 @@
 bin/
 tmp/
 *.tmp
+*.apk
+*.swf
 *.bak
 *.swp
 *~.nib

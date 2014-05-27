@@ -16,10 +16,10 @@
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
 	<id>babeliumobile.debug</id>
-
+	
 	<!-- Used as the filename for the application. Required. -->
 	<filename>Main</filename>
-
+	
 	<!-- The name that is displayed in the AIR application installer. 
 	May have multiple values for each language. See samples or xsd schema file. Optional. -->
 	<name>Babelium Project-debug</name>
@@ -192,6 +192,10 @@
 
 	<!-- Specify Android specific tags that get passed to AndroidManifest.xml file. -->
 	<android> 
+		
+	<!-- Color depth for the application -->
+	<colorDepth>16bit</colorDepth>
+	
 		<manifestAdditions>
 		<![CDATA[
 			<manifest android:installLocation="auto">

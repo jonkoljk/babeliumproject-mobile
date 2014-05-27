@@ -22,11 +22,11 @@ package model
 		//This solution for singleton implementation was found in
 		//http://life.neophi.com/danielr/2006/10/singleton_pattern_in_as3.html		
 		public static var instance:DataModel = new DataModel();
-		public var array:Array =["My Profile","My Videos","About Us","Log Out"];
+		public var array:Array =["My Profile", "Language", "My Videos","About Us","Log Out"];
 		public var evalArray:Array =["To evaluate","Assessments to me","Assessments by me"];
-		public var lang:Array= new Array("ES_ES","EN_US","EN_NZ","EU_ES","FR_FR","AR_MA","DE_DE");
-		public var lang_name:Array= new Array("Spanish (Spain)","English (United States)",
-			"English (New Zealand)","Basque","French (France)","Arabic (Morocco)","German (Germany)");
+		public var lang:Array= new Array("ES_ES","EN_US", "EU_ES", "FR_FR", "DE_DE");
+		public var lang_name:Array= new Array("Spanish (Spain)","English (United States)", "Basque", 
+			"French (France)","German (Germany)");
 		public var scores:Array = ["10","9","8","7","6","5","4","3","2","1","0"];
 		
 	    //public var appBody:Body;
@@ -51,6 +51,10 @@ package model
 		//Scores
 		
 		[Bindable]public var scoresArrayCollection:ArrayCollection = new ArrayCollection(scores);
+		
+		//Available languages
+		
+		[Bindable]public var selectLanguageArrayCollection:ArrayCollection = new ArrayCollection(lang_name);
 		
 		//Respones VideoList
 		

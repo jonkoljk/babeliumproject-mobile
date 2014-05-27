@@ -71,38 +71,36 @@
 			}
 			
 			
-			protected function cb_creationCompleteHandler(event:FlexEvent):void
-			{
+			protected function cb_creationCompleteHandler(event:FlexEvent):void{
 				// get data from the server
 							
 			}
 			
-			protected function list_changeHandler(event:IndexChangeEvent):void
-				
-			{
-				if(list.selectedItem=="My Profile"){
+			protected function list_changeHandler(event:IndexChangeEvent):void{
+				if (list.selectedItem=="My Profile"){
 						navigator.pushView(View.User_Profile,null,null,slideTrans);
-					
-				}
-					
-				else{
-					if(list.selectedItem=="My Videos"){
-						navigator.pushView(View.My_Videos,null,null,slideTrans);
-					}
-					else{
-						if(list.selectedItem=="About Us"){
-							navigator.pushView(View.About,null,null,slideTrans);
-						}
-						else if(list.selectedItem=="Log Out"){
-							//Log out User call  log out event!
-							new LoginEvent(LoginEvent.SIGN_OUT, null).dispatch();
-							navigator.popToFirstView(null);
-							
+				} else {
+					if (list.selectedItem=="Language"){
+						navigator.pushView(View.SelectLanguage,null,null,slideTrans);
+					}else {
+						if (list.selectedItem=="My Videos"){
+							navigator.pushView(View.My_Videos,null,null,slideTrans);
+						}else {
+							if (list.selectedItem=="About Us"){
+								navigator.pushView(View.About,null,null,slideTrans);
+							}else {
+								if (list.selectedItem=="Log Out"){
+								//Log out User call  log out event!
+								new LoginEvent(LoginEvent.SIGN_OUT, null).dispatch();
+								navigator.popToFirstView(null);
+																
+							}
 						}
 					}
 				}
 				cb.closeDropDown();
 				List(event.target).selectedItem=null;
+				}
 				
 				// TODO Auto-generated method stub
 				

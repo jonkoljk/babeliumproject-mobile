@@ -384,8 +384,7 @@
 			}
 			
 			private function setValue(e:Event,value:int):void{
-				switch(value)
-				{
+				switch(value){
 					case 1:
 						puntButton1.label=e.currentTarget.selectedItem;
 						puntButton1.closeDropDown();
@@ -438,7 +437,7 @@
 					punt4.selectedItem != null &&
 					punt5.selectedItem != null){
 					_validEvaluation = true;
-					if (checkTestua.selected == true && testuIruzkina.text == null){
+					if (checkTestua.selected == true && (testuIruzkina.text == null || testuIruzkina.text == "")){
 						_validEvaluation = false;
 					}
 				}
