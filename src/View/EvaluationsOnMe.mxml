@@ -12,10 +12,14 @@
 	<fx:Script>
 		<![CDATA[
 			import events.EvaluationEvent;
-			import spark.events.IndexChangeEvent;
+			
 			import model.DataModel;
+			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
 			import utils.CustomItemRendererEvaluationTable;
 			
 			import vo.EvaluationVO;
@@ -47,7 +51,7 @@
 			protected function videosOfMineEvaluatedDataGroup_changeHandler(event:IndexChangeEvent):void
 			{
 				var obj:EvaluationVO=List(event.target).selectedItem as EvaluationVO;
-				navigator.pushView(View.Evaluate,obj,null,slideTrans);
+				navigator.pushView(View.ViewEvaluations,obj,null,slideTrans);
 				List(event.target).selectedItem = null;
 				//BabeliaBrowserManager.getInstance().parseURL(null);
 			}
