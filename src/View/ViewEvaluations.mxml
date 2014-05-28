@@ -407,6 +407,7 @@
 				punt5.text = _assessmentDetailsList[index].overallScore;
 				textCommentArea.text = _assessmentDetailsList[index].comment;
 				assessmentDate.text = _assessmentDetailsList[index].addingDate;
+				userButton.label = _assessmentDetailsList[index].userName;
 				userButton.closeDropDown();
 			}
 									

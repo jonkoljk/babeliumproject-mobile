@@ -103,7 +103,7 @@
 			<utils:search width="100%" />
 		</s:HGroup>
 		
-		<s:HGroup id="section_title" height="50%" width="100%"  verticalAlign="middle" horizontalAlign="center">
+		<s:HGroup id="section_title" height="170" width="100%"  verticalAlign="middle" horizontalAlign="center">
 			<s:Label id="userProfileTitleLabel" width="40%" styleName="sectionTitleLabel"
 					 text="{resourceManager.getString('myResources','PROMPT_SELECT_LANGUAGE')}"
 					 textAlign="center"/>
