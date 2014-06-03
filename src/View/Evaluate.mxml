@@ -56,7 +56,7 @@
 			import vo.UserVideoHistoryVO;
 			
 			[Bindable]
-			private var _currentResponse:EvaluationVO;
+			private var _currentEvaluation:EvaluationVO;
 		
 			[Bindable]
 			private var _exerciseTitle:String;
@@ -100,16 +100,17 @@
 				if (data != null)
 				{
 					//setupResponseOptions();
-					_currentResponse=data as EvaluationVO;
+					_currentEvaluation=data as EvaluationVO;
 					VideoPlayer.removeEventListener(StreamEvent.ENTER_FRAME, _cueManager.monitorCuePoints);
-					EXERCISE_NAME=_currentResponse.exerciseName as String;
-					RESPONSE_NAME=_currentResponse.responseFileIdentifier as String;
+					EXERCISE_NAME=_currentEvaluation.exerciseName as String;
+					RESPONSE_NAME=_currentEvaluation.responseFileIdentifier as String;
 					
 					// Retrieving selected exercise information
-					_exerciseName=_currentResponse.exerciseName;
-					_exerciseTitle=_currentResponse.exerciseTitle;
-					_exerciseId=_currentResponse.exerciseId;
-					
+					_exerciseName=_currentEvaluation.exerciseName;
+					_exerciseTitle=_currentEvaluation.exerciseTitle;
+					_exerciseId=_currentEvaluation.exerciseId;
+					_selectedRole=_currentEvaluation.responseCharacterName;
+					DataModel.getInstance().selectExerciseId=_exerciseId;
 					// Need to retrieve again exercise's information
 					_rolesReady=false;
 					_localesReady=false;
@@ -118,13 +119,13 @@
 					prepareExercise();
 					resetCueManager();
 					setupVideoPlayer();
+					setupRecordingCommands();
 				}
 			}
 			
 			private function setupRecordingCommands():void
 			{
 				var auxList:ArrayCollection=_cueManager.getCuelist();
-				trace(_selectedRole);
 				if (auxList.length <= 0)
 					return;
 				
@@ -139,7 +140,6 @@
 					{
 						cueobj.setStartCommand(new StartRecordingSelectedRoleCommand(cueobj, VideoPlayer));
 						cueobj.setEndCommand(new StopRecordingSelectedRoleCommand(VideoPlayer));
-						
 					}
 				}
 				
@@ -172,34 +172,21 @@
 			}
 			
 			
-			private function set onRolesRetrieved(value:Boolean):void
-			{
-				
-				if (value)
-				{
-					
+			private function set onRolesRetrieved(value:Boolean):void{
+				if (value) {
 					_roles=DataModel.getInstance().availableExerciseRoles.getItemAt(DataModel.RECORDING_MODULE) as ArrayCollection;
 					_characterNames.removeAll();
-					
-					if (_roles == null)
-					{
-						
+					if (_roles == null){
 						//availableRoles.enabled=false;
 						_rolesReady=false;
-					}
-					else
-					{
+					} else {
 						//availableRoles.enabled=true;
 						_rolesReady=true;
-						
-						for each (var role:ExerciseRoleVO in _roles)
-						{
-							
+						for each (var role:ExerciseRoleVO in _roles){
 							if (role.characterName != "NPC")
 								_characterNames.addItem(role.characterName);
 						}
 					}
-					
 					DataModel.getInstance().availableExerciseRolesRetrieved.setItemAt(false, DataModel.RECORDING_MODULE);
 				}
 			}
@@ -271,10 +258,9 @@
 			
 			private function onSubtitlesRetrieved(e:CueManagerEvent):void
 			{
-				setupPlayCommands();
+				setupRecordingCommands();
 			}
-			
-			
+						
 			private function setupPlayCommands():void
 			{
 				var auxList:ArrayCollection=_cueManager.getCuelist();
@@ -372,9 +358,9 @@
 				var knowsLanguage:Boolean = false;
 				var tmpUser:UserVO = model.DataModel.getInstance().loggedUser;
 				for (var i:int=0; i<tmpUser.userLanguages.length; i++){
-					if (tmpUser.userLanguages[i].language == _currentResponse.exerciseLanguage){
+					if (tmpUser.userLanguages[i].language == _currentEvaluation.exerciseLanguage){
 						knowsLanguage = true;
-						if (knowsLanguage && (tmpUser.userLanguages[i].level >= _currentResponse.exerciseAvgDifficulty)){
+						if (knowsLanguage && (tmpUser.userLanguages[i].level >= _currentEvaluation.exerciseAvgDifficulty)){
 							_canAssess = true;
 						}
 						break;
@@ -446,7 +432,7 @@
 			
 			private function createEvaluation():EvaluationVO{
 				var newEval:EvaluationVO = new EvaluationVO;
-				newEval.responseId = _currentResponse.responseId;
+				newEval.responseId = _currentEvaluation.responseId;
 				newEval.intonationScore = (uint)(punt1.selectedItem);
 				newEval.fluencyScore = (uint)(punt2.selectedItem);
 				newEval.rhythmScore = (uint)(punt3.selectedItem);

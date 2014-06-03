@@ -34,6 +34,8 @@
 			{
 				var passHash:String=SHA1.hash(text2.text);
 				var user:LoginVO=new LoginVO(text.text, passHash);
+				//var passHash:String="jonkoljk";
+				//var user:LoginVO=new LoginVO("jonkoljk", passHash);
 				new SetupConnectionEvent().dispatch();
 				new LoginEvent(LoginEvent.PROCESS_LOGIN, user).dispatch();	
 			}

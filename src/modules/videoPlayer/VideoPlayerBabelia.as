@@ -398,6 +398,8 @@ package modules.videoPlayer
 						
                         else if (state == PLAY_BOTH_STATE)
                         {
+							trace("flag" + flag);
+							trace("sound" + _inNs.soundTransform);
                                 if (flag && _inNs != null)
                                         _inNs.soundTransform=new SoundTransform(0);
                                 else if (_inNs != null)
@@ -426,7 +428,7 @@ package modules.videoPlayer
                         else
 							
                               
-						//	playSecondStream();
+							//playSecondStream();
 						
                         // splits video panel into 2 views
                        splitVideoPanel();
@@ -1272,6 +1274,7 @@ package modules.videoPlayer
 						_inNs=new NetStream(_nc);
 						_inNs.addEventListener(NetStatusEvent.NET_STATUS, onSecondStreamNetStream);
 						_inNs.soundTransform=new SoundTransform(_audioSlider.getCurrentVolume());
+						trace(_audioSlider.getCurrentVolume());
 						
 						// Not metadata nor cuepoint manage needed, so
 						// create an empty client for the second stream
@@ -1292,7 +1295,7 @@ package modules.videoPlayer
 						_inNs.play(_secondStreamSource);
 						// Needed for video mute
 						muteRecording(false);
-						muteRecording(true);
+						
 						
 						if (_ns != null)
 							//_ns.resume();
@@ -1363,7 +1366,7 @@ package modules.videoPlayer
                                         break;
                         }
                         
-                        trace("Response status: " + event.info.code);
+                        //trace("Response status: " + event.info.code);
                 }
 
         }

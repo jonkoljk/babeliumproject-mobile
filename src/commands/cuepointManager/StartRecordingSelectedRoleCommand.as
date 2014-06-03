@@ -18,6 +18,7 @@ package commands.cuepointManager
 		{
 			this.VP=VP;
 			this.cue = cue;
+			trace("start recording command");
 		}
 
 		public function execute(event:CairngormEvent):void
@@ -26,6 +27,7 @@ package commands.cuepointManager
 //				executed = true;
 				VP.setSubtitle(cue.text, cue.textColor);
 				//VP.playSpeakNotice();
+				trace("execute");
 				VP.muteVideo(true);
 				VP.muteRecording(false);
 				var time:Number = cue.endTime - cue.startTime as Number;

@@ -115,6 +115,7 @@
 					_exerciseName=_currentEvaluation.exerciseName;
 					_exerciseTitle=_currentEvaluation.exerciseTitle;
 					_exerciseId=_currentEvaluation.exerciseId;
+					_selectedRole=_currentEvaluation.responseCharacterName;
 					DataModel.getInstance().selectExerciseId=_exerciseId;
 					// Need to retrieve again exercise's information
 					_rolesReady=false;
@@ -125,7 +126,7 @@
 					resetCueManager();
 					setupVideoPlayer();
 					setupRecordingCommands();
-					//ratingShareReport.exerciseData=tmp2;
+					
 				}
 			}
 			
@@ -146,7 +147,6 @@
 			private function setupRecordingCommands():void
 			{
 				var auxList:ArrayCollection=_cueManager.getCuelist();
-				trace(_selectedRole);
 				if (auxList.length <= 0)
 					return;
 				
@@ -161,7 +161,6 @@
 					{
 						cueobj.setStartCommand(new StartRecordingSelectedRoleCommand(cueobj, VideoPlayer));
 						cueobj.setEndCommand(new StopRecordingSelectedRoleCommand(VideoPlayer));
-						
 					}
 				}
 				
@@ -170,58 +169,42 @@
 			
 			private function set onLocalesRetrieved(value:Boolean):void
 			{
-				if (value)
-				{
-					
+				if (value){
 					_locales=DataModel.getInstance().availableExerciseLocales;
-					if (_locales == null)
-					{
+					if (_locales == null){
 						//availableLocales.enabled=false;
 						_localesReady=false;
 					}
-					else
-					{
+					else {
 						//availableLocales.enabled=true;
 						_localesReady=true;
-						
 						// Preparing subtitles
-						
 						prepareCueManager();
 					}
-					
 					DataModel.getInstance().availableExerciseLocalesRetrieved=false;
 				}
 			}
 			
-			
 			private function set onRolesRetrieved(value:Boolean):void
 			{
 				
-				if (value)
-				{
-					
+				if (value){
 					_roles=DataModel.getInstance().availableExerciseRoles.getItemAt(DataModel.RECORDING_MODULE) as ArrayCollection;
 					_characterNames.removeAll();
-					
-					if (_roles == null)
-					{
+					if (_roles == null){
 						
 						//availableRoles.enabled=false;
 						_rolesReady=false;
-					}
-					else
-					{
+					} else {
 						//availableRoles.enabled=true;
 						_rolesReady=true;
 						
 						for each (var role:ExerciseRoleVO in _roles)
-						{
-							
+						{	
 							if (role.characterName != "NPC")
 								_characterNames.addItem(role.characterName);
 						}
 					}
-					
 					DataModel.getInstance().availableExerciseRolesRetrieved.setItemAt(false, DataModel.RECORDING_MODULE);
 				}
 			}
@@ -293,7 +276,7 @@
 			
 			private function onSubtitlesRetrieved(e:CueManagerEvent):void
 			{
-				setupPlayCommands();
+				setupRecordingCommands();
 			}
 			
 			private function setupPlayCommands():void
