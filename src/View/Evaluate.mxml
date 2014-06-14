@@ -170,8 +170,7 @@
 					DataModel.getInstance().availableExerciseLocalesRetrieved=false;
 				}
 			}
-			
-			
+						
 			private function set onRolesRetrieved(value:Boolean):void{
 				if (value) {
 					_roles=DataModel.getInstance().availableExerciseRoles.getItemAt(DataModel.RECORDING_MODULE) as ArrayCollection;

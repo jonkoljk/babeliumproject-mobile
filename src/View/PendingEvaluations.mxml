@@ -16,13 +16,11 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			import spark.events.IndexChangeEvent;
-			import utils.CustomItemRendererEvaluationTable;
 			import vo.EvaluationVO;
 			
 			[Bindable]
 			private var waitingForAssessmentList:ArrayCollection = new ArrayCollection();
-			
-			
+						
 			private function set ShowUser(value:Boolean):void
 			{
 				if(value){
